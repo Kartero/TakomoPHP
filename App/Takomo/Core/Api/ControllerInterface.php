@@ -8,5 +8,9 @@ interface ControllerInterface
 {
     public function getRequest() : Request;
 
-    public function getReponse() : Response;
+    public function getResponse() : Response;
+
+    public function setTemplate(string $part, string $path): void;
+
+    public function setVariable(string $key, $value): void;
 }

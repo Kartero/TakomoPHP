@@ -11,6 +11,8 @@ class Request
 
     private string $request_uri;
 
+    private array $request_parts = [];
+
     public function execute() : array
     {
         $this->extractRequest();
@@ -42,12 +44,19 @@ class Request
     {
         $parts = explode('/', $this->request_uri);
         if (count($parts) < 2) {
-            $controller = '\Takomo\Core\Controller\HomeController';
-            $method = 'index';
-        } else {
-            $controller = '';
-            $method = '';
+            $parts = [
+                'Core',
+                'Home'
+            ];
         }
+
+        $controller = sprintf('\\Takomo\\%s\\Controller\\%sController', 
+                ucfirst($parts[0]), 
+                ucfirst($parts[1])
+            );
+        $method = $parts[2] ?? 'index';
+        $parts[2] = $method;
+        $this->request_parts = $parts;
 
         return [
             $controller,
@@ -63,5 +72,8 @@ class Request
         $this->request_uri = substr($_SERVER['REQUEST_URI'], 1);
     }
 
-
+    public function getRequestParts()
+    {
+        return $this->request_parts;
+    }
 }

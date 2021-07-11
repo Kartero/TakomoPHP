@@ -17,6 +17,7 @@ class Bootstrap
         $controller = new $class($this->request, $this->response);
         if ($controller instanceof ControllerInterface) {
             $method = $controller_parts[1];
+            $controller->{'beforeRender'}();
             $controller->{$method}();
         }
 

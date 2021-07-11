@@ -5,6 +5,10 @@ class HomeController extends AbstractController
 {
     public function index()
     {
-        $this->response->body('etusivu');
+        $this->setVariables([
+            'title' => 'Etusivu',
+            'hello' => 'terve vaan'
+        ]);
+        $this->render();
     }
 }
