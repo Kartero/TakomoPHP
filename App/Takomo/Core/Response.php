@@ -3,8 +3,13 @@ namespace Takomo\Core;
 
 class Response
 {
-    public function body()
+    private string $body;
+
+    public function body(?string $body = null)
     {
-        echo 'hello x 3';
+        if ($body !== null) {
+            $this->body = $body;
+        }
+        return $this->body;
     }
 }

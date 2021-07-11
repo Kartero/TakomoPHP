@@ -1,5 +1,7 @@
 {
     "autoload": {
-        "psr-4": {"Takomo\\Core\\": "App/Takomo/Core/"}
+        "psr-4": {
+            "": "App/"
+        }
     }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace Takomo\Core;
 
+use Takomo\Core\Api\ControllerInterface;
+
 class Bootstrap
 {
     public function __construct(
@@ -10,8 +12,14 @@ class Bootstrap
 
     public function execute()
     {
-        echo 'Hello';
-        $this->request->execute();
-        $this->response->body();
+        $controller_parts = $this->request->execute();
+        $class = $controller_parts[0];
+        $controller = new $class($this->request, $this->response);
+        if ($controller instanceof ControllerInterface) {
+            $method = $controller_parts[1];
+            $controller->{$method}();
+        }
+
+        echo $this->response->body();
     }
 }
