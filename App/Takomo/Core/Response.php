@@ -1,6 +1,8 @@
 <?php
 namespace Takomo\Core;
 
+use Takomo\Core\Tools\TemplateLoader;
+
 class Response
 {
     private string $body;
@@ -17,14 +19,8 @@ class Response
     {
         $this->body = file_get_contents($templates['base']);
         unset($templates['base']);
-        foreach ($templates as $key => $template) {
-            $tmp_template = file_get_contents($template);
-            $this->body = str_replace("{% $key %}", $tmp_template, $this->body);
-        }
-
-        foreach ($variables as $key => $value) {
-            $this->body = str_replace("{{ $key }}", $value, $this->body);
-        }
+        $this->body = TemplateLoader::parseBlocks($this->body, $templates);
+        $this->body = TemplateLoader::parseVariables($this->body, $variables);
 
         return $this->body;
     }

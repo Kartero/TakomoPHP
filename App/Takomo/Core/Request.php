@@ -1,6 +1,8 @@
 <?php
 namespace Takomo\Core;
 
+use Takomo\Core\Tools\Normalize;
+
 class Request
 {
     private array $get = [];
@@ -50,10 +52,12 @@ class Request
             ];
         }
 
-        $controller = sprintf('\\Takomo\\%s\\Controller\\%sController', 
-                ucfirst($parts[0]), 
-                ucfirst($parts[1])
+        $controller = sprintf(
+            '\\Takomo\\%s\\Controller\\%sController', 
+            Normalize::snakeCaseToPascalCase($parts[0]), 
+            Normalize::snakeCaseToPascalCase($parts[1])
             );
+            
         $method = $parts[2] ?? 'index';
         $parts[2] = $method;
         $this->request_parts = $parts;

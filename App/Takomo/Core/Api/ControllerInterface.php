@@ -13,4 +13,8 @@ interface ControllerInterface
     public function setTemplate(string $part, string $path): void;
 
     public function setVariable(string $key, $value): void;
+
+    public function render() : string;
+
+    public function beforeRender() : void;
 }

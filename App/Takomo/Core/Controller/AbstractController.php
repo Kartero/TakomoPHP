@@ -36,9 +36,11 @@ abstract class AbstractController implements ControllerInterface
         $this->variables[$key] = $value;
     }
 
-    public function beforeRender()
+    public function beforeRender() : void
     {
         $this->setTemplate('base',  'base');
+        $this->setTemplate('menu',  'Layout/menu');
+        $this->setTemplate('footer',  'Layout/footer');
         $content_path = implode('/', $this->getRequest()->getRequestParts());
         $this->setTemplate('content', $content_path);
     }
