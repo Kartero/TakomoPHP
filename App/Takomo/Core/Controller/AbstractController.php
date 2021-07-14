@@ -31,6 +31,13 @@ abstract class AbstractController implements ControllerInterface
         $this->templates[$part] = VIEW_PATH . '/' . $path . '.html';
     }
 
+    public function setTemplates(array $templates) : void
+    {
+        foreach ($templates as $name => $template) {
+            $this->setTemplate($name, $template);
+        }
+    }
+
     public function setVariable(string $key, $value): void
     {
         $this->variables[$key] = $value;
@@ -38,9 +45,15 @@ abstract class AbstractController implements ControllerInterface
 
     public function beforeRender() : void
     {
-        $this->setTemplate('base',  'base');
-        $this->setTemplate('menu',  'Layout/menu');
-        $this->setTemplate('footer',  'Layout/footer');
+        $templates = [
+            'base' => 'base',
+            'menu' => 'Layout/menu',
+            'menu-item' => 'Layout/Menu/menu-item',
+            'footer' => 'Layout/footer',
+            'banner' => 'Layout/banner'
+        ];
+
+        $this->setTemplates($templates);
         $content_path = implode('/', $this->getRequest()->getRequestParts());
         $this->setTemplate('content', $content_path);
     }

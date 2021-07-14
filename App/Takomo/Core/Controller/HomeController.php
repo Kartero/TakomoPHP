@@ -7,7 +7,18 @@ class HomeController extends AbstractController
     {
         $this->setVariables([
             'title' => 'Etusivu',
-            'hello' => 'terve vaan'
+            'hello' => 'terve vaan',
+            'home_url' => '/',
+            'menu-items' => [
+                [
+                    'link' => '/',
+                    'title' => 'Crm'
+                ],
+                [
+                    'link' => '/home',
+                    'title' => 'Blogi'
+                ]
+            ]
         ]);
         $this->render();
     }

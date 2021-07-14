@@ -20,7 +20,7 @@ class Response
         $this->body = file_get_contents($templates['base']);
         unset($templates['base']);
         $this->body = TemplateLoader::parseBlocks($this->body, $templates);
-        $this->body = TemplateLoader::parseVariables($this->body, $variables);
+        $this->body = TemplateLoader::parseVariables($this->body, $variables, $templates);
 
         return $this->body;
     }
