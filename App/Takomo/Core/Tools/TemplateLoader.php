@@ -3,8 +3,9 @@ namespace Takomo\Core\Tools;
 
 /**
  * Template syntax
- * {{ $variable }}
- * {% $template_block %} 
+ * SImple variable {{ variable }}
+ * Template {% template_block %}
+ * List of variables {{ foreach variable template }}
  */
 class TemplateLoader
 {

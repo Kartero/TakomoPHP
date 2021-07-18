@@ -15,6 +15,8 @@ class Request
 
     private array $request_parts = [];
 
+    private array $request_params = [];
+
     public function execute() : array
     {
         $this->extractRequest();
@@ -22,22 +24,22 @@ class Request
         return $this->getController();
     }
 
-    public function getParams()
+    public function getParams() : array
     {
         return $this->get;
     }
 
-    public function postParams()
+    public function postParams() : array
     {
         return $this->post;
     }
 
-    public function isGet()
+    public function isGet() : bool
     {
         return $this->method == 'GET';
     }
 
-    public function isPost()
+    public function isPost() : bool
     {
         return $this->method == 'POST';
     }
@@ -45,15 +47,22 @@ class Request
     public function getController() : array
     {
         $parts = explode('/', $this->request_uri);
-        if (count($parts) < 2) {
+        $parts_count = count($parts);
+        if ($parts_count < 2) {
             $parts = [
                 'Core',
                 'Home'
             ];
         }
 
+        if ($parts_count > 3) {
+            for ($i = 3; $i < $parts_count; $i++) {
+                $this->request_params[] = $parts[$i];
+            }
+        }
+
         $controller = sprintf(
-            '\\Takomo\\%s\\Controller\\%sController', 
+            '\\{vendor}\\%s\\Controller\\%sController', 
             Normalize::snakeCaseToPascalCase($parts[0]), 
             Normalize::snakeCaseToPascalCase($parts[1])
             );
@@ -68,7 +77,7 @@ class Request
         ];
     }
 
-    private function extractRequest()
+    private function extractRequest() : void
     {
         $this->get = $_GET;
         $this->post = $_POST;
@@ -76,8 +85,13 @@ class Request
         $this->request_uri = substr($_SERVER['REQUEST_URI'], 1);
     }
 
-    public function getRequestParts()
+    public function getRequestParts() : array
     {
         return $this->request_parts;
+    }
+
+    public function getRequestParams() : array
+    {
+        return $this->request_params;
     }
 }

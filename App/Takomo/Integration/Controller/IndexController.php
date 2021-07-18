@@ -10,8 +10,8 @@ class IndexController extends AbstractController
         $this->response->body('integraatio index');
     }
 
-    public function second()
+    public function second(int $id)
     {
-        $this->response->body('integraatio second');
+        $this->response->body('integraatio second ' . $id);
     }
 }
