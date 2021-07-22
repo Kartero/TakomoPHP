@@ -2,8 +2,10 @@
 namespace Takomo\Core\Controller;
 
 use Takomo\Core\Api\ControllerInterface;
+use Takomo\Core\Logger;
 use Takomo\Core\Request;
 use Takomo\Core\Response;
+use Takomo\Core\Tools\Normalize;
 
 abstract class AbstractController implements ControllerInterface
 {
@@ -54,8 +56,20 @@ abstract class AbstractController implements ControllerInterface
         ];
 
         $this->setTemplates($templates);
-        $content_path = implode('/', $this->getRequest()->getRequestParts());
+        $content_path = implode('/', Normalize::sctpcArray(
+            $this->getRequest()->getRequestParts(), 
+            [
+                'keep_last' => true
+            ])
+        );
         $this->setTemplate('content', $content_path);
+
+        $this->setVariables([
+            'title' => str_replace('Controller', '', static::class),
+            'hello' => 'terve vaan',
+            'home_url' => '/',
+            'menu-items' => $this->menu()
+        ]);
     }
 
     public function setVariables(array $variables) : void
@@ -67,6 +81,27 @@ abstract class AbstractController implements ControllerInterface
 
     public function render() : string
     {
-        return $this->response->render($this->templates, $this->variables);
+        return $this->getResponse()->render($this->templates, $this->variables);
+    }
+
+    public function redirect(string $url, int $response_code = 302) : void
+    {
+        $this->getResponse()->setHeaders(['Location', $url]);
+        $this->getResponse()->setResponseCode($response_code);
+        $this->render();
+    }
+
+    protected function menu() : array
+    {
+        return [
+                [
+                    'link' => '/',
+                    'title' => 'Crm'
+                ],
+                [
+                    'link' => '/home',
+                    'title' => 'Blogi'
+                ]
+            ];
     }
 }

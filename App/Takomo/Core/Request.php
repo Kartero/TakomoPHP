@@ -50,8 +50,8 @@ class Request
         $parts_count = count($parts);
         if ($parts_count < 2) {
             $parts = [
-                'Core',
-                'Home'
+                'core',
+                'home'
             ];
         }
 

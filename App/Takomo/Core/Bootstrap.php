@@ -3,6 +3,7 @@ namespace Takomo\Core;
 
 use ReflectionClass;
 use Takomo\Core\Api\ControllerInterface;
+use Takomo\Core\Tools\Url;
 
 class Bootstrap
 {
@@ -27,17 +28,18 @@ class Bootstrap
                 $param_count = count($method_params);
                 $request_params = $this->request->getRequestParams();
                 if (count($request_params) != $param_count) {
-                    throw new \Exception("{$class}:{$method} expects {$param_count} parameters!");
+                    throw new \Exception("{$class}::{$method} expects {$param_count} parameters!");
                 }
                 
                 $controller->beforeRender();
                 $controller->{$method}(...$request_params);
             }
         } catch (\Exception $e) {
-            Logger::write('error.log', $e->getMessage());
+            Logger::error($e->getMessage());
+            $redirect_url = Url::getUrl('/core/not_found/error');
+            header("Location: $redirect_url", true, 302);
         }
         
-
         echo $this->response->body();
     }
 

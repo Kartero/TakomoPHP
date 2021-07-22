@@ -5,9 +5,17 @@ class Logger
 {
     public static function write(string $file, string $text) : void
     {
-        $full_file = LOG_PATH . '/$file';
+        $text = date('Y-m-d H:i:s') . ' ' . $text . PHP_EOL;
+
+        $full_file = LOG_PATH . "/$file";
         if (!is_dir(LOG_PATH)) {
             mkdir(LOG_PATH, 0755, true);
+        }
+
+        if (!is_file($full_file)) {
+            $fp = fopen($full_file, 'w');
+            fclose($fp);
+            chmod($full_file, 0777);
         }
 
         if ($fp = fopen($full_file,'a')) {
@@ -23,6 +31,18 @@ class Logger
             }
             fclose($fp);
         }
-           
+    }
+
+    public static function error(string $text) : void
+    {
+        self::write('error.log', $text);
+    }
+
+    public static function debug(string $text) : void
+    {
+        $debug = (int) Config::loadConfig('debug');
+        if ($debug > 0) {
+            self::write('debug.log', $text);
+        }
     }
 }
