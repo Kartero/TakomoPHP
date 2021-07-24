@@ -65,7 +65,7 @@ abstract class AbstractController implements ControllerInterface
         $this->setTemplate('content', $content_path);
 
         $this->setVariables([
-            'title' => str_replace('Controller', '', static::class),
+            'title' => str_replace('Controller', '', end(explode('\\', static::class))),
             'hello' => 'terve vaan',
             'home_url' => '/',
             'menu-items' => $this->menu()

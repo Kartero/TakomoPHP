@@ -2,6 +2,7 @@
 namespace Takomo\Core;
 
 use Takomo\Core\Tools\Normalize;
+use Takomo\Core\Tools\SuperGlobals;
 
 class Request
 {
@@ -79,10 +80,10 @@ class Request
 
     private function extractRequest() : void
     {
-        $this->get = $_GET;
-        $this->post = $_POST;
-        $this->method = $_SERVER['REQUEST_METHOD'];
-        $this->request_uri = substr($_SERVER['REQUEST_URI'], 1);
+        $this->get = SuperGlobals::get();
+        $this->post = SuperGlobals::post();
+        $this->method = SuperGlobals::server('REQUEST_METHOD');
+        $this->request_uri = substr(SuperGlobals::server('REQUEST_URI'), 1);
     }
 
     public function getRequestParts() : array

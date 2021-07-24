@@ -12,7 +12,7 @@ class Logger
             mkdir(LOG_PATH, 0755, true);
         }
 
-        if (!is_file($full_file)) {
+        if (!file_exists($full_file)) {
             $fp = fopen($full_file, 'w');
             fclose($fp);
             chmod($full_file, 0777);
@@ -40,7 +40,7 @@ class Logger
 
     public static function debug(string $text) : void
     {
-        $debug = (int) Config::loadConfig('debug');
+        $debug = (int) Config::getConfig('debug');
         if ($debug > 0) {
             self::write('debug.log', $text);
         }

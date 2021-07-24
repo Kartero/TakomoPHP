@@ -12,7 +12,7 @@ class Config
         if (!$file) {
             $file = self::CONFIG_FILE;
         } 
-        $config = file($file, FILE_SKIP_EMPTY_LINES);
+        $config = (array) file($file, FILE_SKIP_EMPTY_LINES);
 
         $external_config_files = [];
         foreach ($config as $entry) {
