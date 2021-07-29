@@ -11,6 +11,10 @@ class Response
 
     private int $response_code = 0;
 
+    public function __construct(
+        private TemplateLoader $templateLoader
+    ) { }
+
     public function body(?string $body = null) : string
     {
         if ($body !== null) {
@@ -24,8 +28,8 @@ class Response
         $this->headers();
         $this->body = file_get_contents($templates['base']);
         unset($templates['base']);
-        $this->body = TemplateLoader::parseBlocks($this->body, $templates);
-        $this->body = TemplateLoader::parseVariables($this->body, $variables, $templates);
+        $this->body = $this->templateLoader->parseBlocks($this->body, $templates);
+        $this->body = $this->templateLoader->parseVariables($this->body, $variables, $templates);
 
         return $this->body;
     }

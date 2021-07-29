@@ -9,7 +9,7 @@ namespace Takomo\Core\Tools;
  */
 class TemplateLoader
 {
-    public static function parseVariables(string $template, array $variables, array $templates) : string
+    public function parseVariables(string $template, array $variables, array $templates) : string
     {
         $regex = "/{{(.*?)}}/";
         preg_match_all($regex, $template, $matches);
@@ -22,7 +22,7 @@ class TemplateLoader
                     $found = true;
                 } else {
                     $parts = explode(' ', $map_key);
-                    $array_result = self::parseArrayVariables($parts, $variables, $templates);
+                    $array_result = $this->parseArrayVariables($parts, $variables, $templates);
                     if ($array_result) {
                         $template = str_replace($match, $array_result, $template);
                     }
@@ -38,7 +38,7 @@ class TemplateLoader
         return $template;
     }
 
-    public static function parseBlocks(string $template, array $templates) : string
+    public function parseBlocks(string $template, array $templates) : string
     {
         $regex = "/{%(.*?)%}/";
         preg_match_all($regex, $template, $matches);
@@ -57,10 +57,10 @@ class TemplateLoader
             }
         }
 
-        return self::parseBlocks($template, $templates);
+        return $this->parseBlocks($template, $templates);
     }
 
-    public static function parseArrayVariables(array $parts, array $variables, array $templates) : string
+    public function parseArrayVariables(array $parts, array $variables, array $templates) : string
     {
         $variable = $parts[1];
         $template = $parts[2] ?? null;
@@ -71,7 +71,7 @@ class TemplateLoader
                 $template_base = file_get_contents($templates[$template]);
                 foreach ($sub_array as $item) {
                     $tmp_template = $template_base;
-                    $result .= self::parseVariables($tmp_template, $item, $templates);
+                    $result .= $this->parseVariables($tmp_template, $item, $templates);
                 }
             }
             

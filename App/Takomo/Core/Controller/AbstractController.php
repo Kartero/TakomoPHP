@@ -9,13 +9,16 @@ use Takomo\Core\Tools\Normalize;
 
 abstract class AbstractController implements ControllerInterface
 {
+    protected Request $request;
+
+    protected Response $response;
+
     protected array $templates = [];
 
     protected array $variables = [];
 
     public function __construct(
-        protected Request $request, 
-        protected Response $response
+        private Normalize $normalize
     ) { }
 
     public function getRequest(): Request
@@ -26,6 +29,16 @@ abstract class AbstractController implements ControllerInterface
     public function getResponse(): Response
     {
         return $this->response;
+    }
+
+    public function setRequest(Request $request): void
+    {
+        $this->request = $request;
+    }
+
+    public function setResponse(Response $response): void
+    {
+        $this->response = $response;
     }
 
     public function setTemplate(string $part, string $path): void
@@ -56,7 +69,7 @@ abstract class AbstractController implements ControllerInterface
         ];
 
         $this->setTemplates($templates);
-        $content_path = implode('/', Normalize::sctpcArray(
+        $content_path = implode('/', $this->normalize->sctpcArray(
             $this->getRequest()->getRequestParts(), 
             [
                 'keep_last' => true

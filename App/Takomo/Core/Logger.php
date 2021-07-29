@@ -3,7 +3,11 @@ namespace Takomo\Core;
 
 class Logger
 {
-    public static function write(string $file, string $text) : void
+    public function __construct(
+        private Config $config
+    ) { }
+
+    public function write(string $file, string $text) : void
     {
         $text = date('Y-m-d H:i:s') . ' ' . $text . PHP_EOL;
 
@@ -33,16 +37,16 @@ class Logger
         }
     }
 
-    public static function error(string $text) : void
+    public function error(string $text) : void
     {
-        self::write('error.log', $text);
+        $this->write('error.log', $text);
     }
 
-    public static function debug(string $text) : void
+    public function debug(string $text) : void
     {
-        $debug = (int) Config::getConfig('debug');
+        $debug = (int) $this->config->getConfig('debug');
         if ($debug > 0) {
-            self::write('debug.log', $text);
+            $this->write('debug.log', $text);
         }
     }
 }

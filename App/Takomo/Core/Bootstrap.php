@@ -9,7 +9,9 @@ class Bootstrap
 {
     public function __construct(
         private Request $request,
-        private Response $response
+        private Response $response,
+        private Config $config,
+        private Logger $logger
     ) { }
 
     public function execute()
@@ -17,8 +19,13 @@ class Bootstrap
         try {
             $controller_parts = $this->request->execute();
             $class = $this->getControllerClass($controller_parts[0]);
-            $controller = new $class($this->request, $this->response);
+
+            $controller = new Autowire($class);
+
+            //$controller = new $class($this->request, $this->response);
             if ($controller instanceof ControllerInterface) {
+                $controller->setRequest($this->request);
+                $controller->setResponse($this->response);
                 $method = $controller_parts[1];
                 $reflection_class = new ReflectionClass($class);
                 if (!$reflection_class->hasMethod($method)) {
@@ -35,7 +42,7 @@ class Bootstrap
                 $controller->{$method}(...$request_params);
             }
         } catch (\Exception $e) {
-            Logger::error($e->getMessage());
+            $this->logger->error($e->getMessage());
             $redirect_url = Url::getUrl('/core/not_found/error');
             header("Location: $redirect_url", true, 302);
         }
@@ -45,7 +52,7 @@ class Bootstrap
 
     private function getControllerClass(string $class) : string
     {
-        $vendors = (array) Config::getConfigArray('vendor');
+        $vendors = (array) $this->config->getConfigArray('vendor');
         foreach ($vendors as $vendor) {
             $class_name = str_replace('{vendor}', $vendor, $class);
             if (class_exists($class_name)) {

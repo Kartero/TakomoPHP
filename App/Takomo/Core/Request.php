@@ -18,6 +18,11 @@ class Request
 
     private array $request_params = [];
 
+    public function __construct(
+        private Normalize $normalize,
+        private SuperGlobals $superGlobals
+    ) { }
+
     public function execute() : array
     {
         $this->extractRequest();
@@ -64,8 +69,8 @@ class Request
 
         $controller = sprintf(
             '\\{vendor}\\%s\\Controller\\%sController', 
-            Normalize::snakeCaseToPascalCase($parts[0]), 
-            Normalize::snakeCaseToPascalCase($parts[1])
+            $this->normalize->snakeCaseToPascalCase($parts[0]), 
+            $this->normalize->snakeCaseToPascalCase($parts[1])
             );
             
         $method = $parts[2] ?? 'index';
@@ -80,10 +85,10 @@ class Request
 
     private function extractRequest() : void
     {
-        $this->get = SuperGlobals::get();
-        $this->post = SuperGlobals::post();
-        $this->method = SuperGlobals::server('REQUEST_METHOD');
-        $this->request_uri = substr(SuperGlobals::server('REQUEST_URI'), 1);
+        $this->get = $this->superGlobals->get();
+        $this->post = $this->superGlobals->post();
+        $this->method = $this->superGlobals->server('REQUEST_METHOD');
+        $this->request_uri = substr($this->superGlobals->server('REQUEST_URI'), 1);
     }
 
     public function getRequestParts() : array

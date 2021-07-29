@@ -10,6 +10,10 @@ interface ControllerInterface
 
     public function getResponse() : Response;
 
+    public function setRequest(Request $request) : void;
+
+    public function setResponse(Response $response): void;
+
     public function setTemplate(string $part, string $path): void;
 
     public function setVariable(string $key, $value): void;
