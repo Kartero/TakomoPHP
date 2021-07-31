@@ -3,11 +3,13 @@ namespace Takomo\Core;
 
 use ReflectionClass;
 use Takomo\Core\Api\ControllerInterface;
+use Takomo\Core\Controller\HomeController;
 use Takomo\Core\Tools\Url;
 
 class Bootstrap
 {
     public function __construct(
+        private Autowire $autowire,
         private Request $request,
         private Response $response,
         private Config $config,
@@ -19,10 +21,7 @@ class Bootstrap
         try {
             $controller_parts = $this->request->execute();
             $class = $this->getControllerClass($controller_parts[0]);
-
-            $controller = new Autowire($class);
-
-            //$controller = new $class($this->request, $this->response);
+            $controller = $this->autowire->di($class);
             if ($controller instanceof ControllerInterface) {
                 $controller->setRequest($this->request);
                 $controller->setResponse($this->response);

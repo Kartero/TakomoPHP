@@ -12,9 +12,4 @@ define('BASE_URL', 'http://' . $_SERVER['SERVER_NAME']);
 
 $autowire = new Autowire();
 $bootstrap = $autowire->di(Bootstrap::class);
-//\Takomo\Core\Config::loadConfig();
-/*$bootstrap = new \Takomo\Core\Bootstrap(
-    new \Takomo\Core\Request(),
-    new \Takomo\Core\Response()
-);*/
 $bootstrap->execute();

@@ -7,9 +7,9 @@ class Config
 
     private array $config = [];
 
-    public function __construct()
+    public function __construct(?string $file = null)
     {
-        $this->loadConfig();
+        $this->loadConfig($file);
     }
 
     private function loadConfig(?string $file = null) : void
@@ -31,7 +31,7 @@ class Config
             $value = $parts[1];
 
             if ($keys[0] === 'config') {
-                $external_config_files[] = $value;
+                $external_config_files[] = trim($value);
                 continue;
             }
             
@@ -39,13 +39,13 @@ class Config
             // TODO! Use some generic and more flexible approach!
             switch ($count) {
                 case 1:
-                    $this->config[$keys[0]] = $value;
+                    $this->config[$keys[0]] = trim($value);
                     break;
                 case 2:
-                    $this->config[$keys[0]][$keys[1]] = $value;
+                    $this->config[$keys[0]][$keys[1]] = trim($value);
                     break;
                 case 3:
-                    $this->config[$keys[0]][$keys[1]][$keys[2]] = $value;
+                    $this->config[$keys[0]][$keys[1]][$keys[2]] = trim($value);
                     break;
             }
         }

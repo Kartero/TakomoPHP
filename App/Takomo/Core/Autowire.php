@@ -2,7 +2,6 @@
 namespace Takomo\Core;
 
 use ReflectionClass;
-use Takomo\Core\Tools\Normalize;
 
 class Autowire
 {
