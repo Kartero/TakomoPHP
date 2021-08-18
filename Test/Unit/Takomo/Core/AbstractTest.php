@@ -10,5 +10,5 @@ abstract class AbstractTest extends TestCase
     {
         $testBase = new TestBase();
         parent::__construct($name, $data, $dataName);
-    }    
+    }
 }

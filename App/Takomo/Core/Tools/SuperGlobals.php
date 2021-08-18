@@ -3,17 +3,17 @@ namespace Takomo\Core\Tools;
 
 class SuperGlobals
 {
-    public static function get() : array
+    public function get() : array
     {
         return $_GET;
     }
 
-    public static function post() : array
+    public function post() : array
     {
         return $_POST;
     }
 
-    public static function server(string $variable) : string
+    public function server(string $variable) : string
     {
         return $_SERVER[$variable];
     }
